@@ -18,6 +18,9 @@ package net.dsys.sss.api;
 
 import java.nio.ByteBuffer;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+
 /**
  * This is the standard interface of secret sharing providers.
  * 
@@ -30,12 +33,14 @@ public interface SecretSharing {
 	 *         Implementations are allowed to fail if callers provide data that
 	 *         is not a multiple of the block size.
 	 */
+	@Nonnegative
 	int getBlockSize();
 
 	/**
 	 * @return the size of the output for a given input length
 	 */
-	int getOutputSize(int length);
+	@Nonnegative
+	int getOutputSize(@Nonnegative int length);
 
 	/**
 	 * Initializes the algorithm for a given threshold and number of shares.
@@ -46,7 +51,7 @@ public interface SecretSharing {
 	 * @param ids
 	 *            the id of each share (i.e. the 'x' coordinate)
 	 */
-	void init(int threshold, int[] ids);
+	void init(@Nonnegative int threshold, @Nonnull int[] ids);
 
 	/**
 	 * Regenerate key material.
@@ -63,7 +68,7 @@ public interface SecretSharing {
 	 * @param dst
 	 *            the content of the shares
 	 */
-	void split(ByteBuffer src, ByteBuffer[] dst);
+	void split(@Nonnull ByteBuffer src, @Nonnull ByteBuffer[] dst);
 
 	/**
 	 * Joins the shares in the secret buffer, using the ids given
@@ -75,6 +80,6 @@ public interface SecretSharing {
 	 * @param dst
 	 *            destination for the reassembled secret
 	 */
-	void join(ByteBuffer[] src, ByteBuffer dst);
+	void join(@Nonnull ByteBuffer[] src, @Nonnull ByteBuffer dst);
 
 }

@@ -18,7 +18,6 @@ package net.dsys.sss.impl;
 
 import java.nio.ByteBuffer;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 import net.dsys.sss.api.SecretSharing;
 
@@ -34,8 +33,8 @@ import net.dsys.sss.api.SecretSharing;
  */
 final class SSSByte implements SecretSharing {
 
-	private static final int MASK = 0xFF;
 	private static final boolean CACHED = true;
+	private static final int MASK = 0xFF;
 
 	private static final int[] MUL;
 	private static final int[] INV;
@@ -191,7 +190,7 @@ final class SSSByte implements SecretSharing {
 		final Random rnd = ThreadLocalRandom.current();
 		final int[] result = new int[threshold];
 		for (int i = 0; i < threshold; i++) {
-			result[i] = rnd.nextInt(256) & MASK;
+			result[i] = (rnd.nextInt(255) + 1) & MASK;
 		}
 		return result;
 	}

@@ -16,21 +16,32 @@
 
 package net.dsys.sss.impl;
 
-import javax.annotation.Nonnull;
+import java.util.Random;
 
-import net.dsys.sss.api.SecretSharing;
+import javax.annotation.Nonnull;
 
 /**
  * @author Ricardo Padilha
  */
-public final class SecretSharings {
+final class ThreadLocalRandom {
 
-	private SecretSharings() {
-		// no instantiation
+	private static final boolean FAST_RANDOM = true;
+	private static final ThreadLocal<Random> RANDOM = new ThreadLocal<Random>() {
+		@Override
+		protected Random initialValue() {
+			return new it.unimi.dsi.util.XorShift128PlusRandom();
+		}
+	};
+
+	private ThreadLocalRandom() {
+		super();
 	}
 
 	@Nonnull
-	public static SecretSharing getDefault() {
-		return new SSSByte();
+	public static Random current() {
+		if (FAST_RANDOM) {
+			return RANDOM.get();
+		}
+		return java.util.concurrent.ThreadLocalRandom.current();
 	}
 }
